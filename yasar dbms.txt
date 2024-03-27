@@ -1,0 +1,127 @@
+create table book1(book_id int,bname varchar(30),author varchar(30),lid int,price numeric(8,2),sid int,fid int,constraint pk2 primary key(book_id));
+create table librarian(lid int ,lname varchar(30),salary numeric(8,3),constraint pk4 primary key(lid));
+create table faccuality(fid int,fname varchar(30),salary numeric(8,2),sid int,lid int,constraint pk500 primary key(fid));
+create table student1(sid int,sname varchar(30),no_of_books int,b_id int,constraint pk100 primary key(sid));
+insert into book1 values(1,'yasar','yasar',101,10000,201,301);
+insert into book1 values(2,'jijo','jijo',102,1000,202,302);
+insert into book1 values(3,'siva','siva',103,100,203,303);
+create table student100(roll_no int,S_name varchar(30),S_address varchar(30));
+create table marksheet100(roll_no int,sub1 varchar(10),sub2 varchar(10),sub3 varchar(10));
+insert into student100 values(1,'rahul','pattom');
+insert into student100 values(2,'sachin','Ambalam mukku');
+insert into student100 values(3,'sourav','nalanchira');
+insert into student100 values(1,'rahul','pattom');
+insert into student100 values(2,'sachin','Ambalam mukku');
+insert into student100 values(3,'sourav','nalanchira');
+insert into marksheet100 values(1,78,30,45);
+insert into marksheet100 values(2,45,65,50);
+insert into marksheet100 values(3,60,87,33);
+alter table marksheet100 add grade varchar(10);
+alter table marksheet100 drop column sub2;
+alter table student100 add phone_number int check (length(phone_number)=10); 
+alter table student100 add phone_number int check (phone_number=10); 
+select * from student100 where S_address='pattom';
+select S_name from student100 where roll_no=3; 
+insert into student100(phone_number)values(1234567890);
+alter table student100 drop column phone_number;
+update student100 set phone_number=1234567890 where roll_no=1;
+update student100 set phone_number=1234567899 where roll_no=2;
+update student100 set phone_number=1234567898 where roll_no=3;
+select phone_number from student100 where S_name='sachin';
+select min(sub1),max(sub1) from marksheet100;
+select min(sub1),avg(sub3) from marksheet100;
+select (sub1+sub3) as total,(sub1+sub3)*2 as double,(sub1+sub3)*3 as triple from marksheet100;
+select count(roll_no) from student100 where S_address='nalanchira';
+select count(roll_no) from student100;
+select distinct sub1 from marksheet100;
+create table student1000(stud_id int,name varchar(10),class int,city varchar(10),total_mark int,percentage numeric(2,3),dep_id int);
+create table staff1000(staff_id int,name varchar(10),dept_id int,designation varchar(10),salary numeric(3,2),city varchar(10));
+create table department1000(dept_id int,name varchar(10));
+create table company1000(comp_id int,name varchar(10),city varchar(10),no_of_employee int,eid int);
+create table employee1000(emp_id int ,name varchar(10),c_id int,designation varchar(10),salary numeric(3,2),city varchar(10));
+
+alter table student1000 add constraint pk33 primary key (stud_id);
+alter table staff1000 add constraint pk34 primary key (staff_id);
+alter table department1000 add constraint pk35 primary key (dept_id);
+alter table company1000 add constraint pk36 primary key (comp_id);
+alter table employee1000 add constraint pk37 primary key (emp_id);
+alter table student1000 add constraint fk33 foreign key(dep_id) references department1000(dept_id); 
+alter table staff1000 add constraint fk34 foreign key(dept_id) references department1000(dept_id);
+alter table company1000 add constraint fk35 foreign key(eid) references employee1000(emp_id);
+alter table employee1000 add constraint fk36 foreign key(c_id) references company1000(comp_id);
+
+insert into student1000 values(1,'yasar',+1,'tvm',98,91.2,101);
+insert into student1000 values(2,'siva',+2,'klm',78,82.3,102);
+insert into student1000 values(3,'jijo',+1,'ala',88,88.9,103);
+
+alter table student1000 modify percentage numeric(5,2);
+
+insert into department1000 values(101,'mca');
+insert into department1000 values(102,'cs');
+insert into department1000 values(103,'ec');
+insert into staff1000 values(201,'A',101,'mca',50000,'tvm');
+insert into staff1000 values(202,'b',102,'mec',25000,'ptm');
+insert into staff1000 values(203,'c',103,'civil',30000,'kpm');
+insert into employee1000 values(301,'arjun',401,'softwered',25000,'tvm');
+insert into employee1000 values(302,'dil',402,'softwered',35000,'tvm');
+insert into employee1000 values(303,'siva',403,'softwered',45000,'klm');
+
+insert into company1000 values(401,'ust','tvm',100,301);no_of_employee
+insert into company1000 values(402,'tcs','tvm',200,302);
+insert into company1000 values(403,'ust','klm',400,303);
+select *  from student1000 order by dep_id;
+select * from employee1000;
+select * from staff1000 where salary>=20000;
+select * from student1000 where total_mark>80 and total_mark<90;
+
+
+select e.emp_id ,e.name,e.designation,e.salary from employee1000 e,company1000 c where e.c_id=c.comp_id and c.no_of_employee>3;
+select * from staff1000;
+select e.staff_id,e.name,e.dept_id,e.city from staff1000 e,student1000 c where e.city=c.city and e.salary>25000;
+update staff1000 set salary=salary+(salary/100)*10 where designation="associateprofessor";
+update staff1000 set designation="ascprofessor" where staff_id=203;
+select e.name from employee1000 e,company1000 c where e.city=c.city;
+select e.emp_id,e.name,e.designation,e.salary from employee1000 e,company1000 c where c.no_of_employee=(select max(no_of_employee) from company1000) and e.emp_id=c.comp_id;
+
+
+
+update employee1000 set salary=salary+salary*(8/100) where emp_id in(select emp_id from employee1000 e,company1000 c where e.city='tvm' and e.designation='mca' and e.c_id=c.comp_id and e.city=c.city);
+
+update employee1000 set salary=salary+salary*(8/100) where emp_id in(select emp_id from employee1000 e,company1000 c where e.city='ernakulam' and e.designation='clerk' and e.c_id=c.comp_id and e.city=c.city); 
+update employee1000 set salary=(salary/100)*10 where designation="softwered";
+
+4a)
+select s.name from student1000 s join department1000 d on s.dep_id=d.dept_id where d.name='mca';
+b>select * from employee1000 where emp_id in (select eid from company1000 where name='tcs');
+c>select * from student1000 natural join department1000;
+
+
+select extract(day,month from sysdate) day,month from dual;
+ select extract (day from sysdate) day from dual;
+ select extract (month from sysdate) month from dual;
+ select extract (year from sysdate) year from dual;
+select extract(hour from sysdate) hour from dual;
+select current_timestamp from dual;
+select sysdate-1 yesterday from dual;
+select to_char(current_date,'hh24-mi-ss') from dual;
+select to_char(current_date-1,'day month ddth yyyy') yesterday from dual;
+select abs(to_date ('01-06-2024','dd-mm-yyyy') - to_date ('01-08-2024','dd-mm-yyyy')) diff from dual;
+
+create table student10(id int primary key,name varchar(10),mark int);
+insert into student10 values(1,'yasar',90);
+insert into student10 values(1,'yasar',90);
+insert into student10 values(6,'jijoo',80);
+insert into student10 values(7,'abcb',101);
+insert into student10 values(13,'abcfg',104);
+
+savepoint <objectname>;
+rollback;
+
+create table employee100(empid int,name varchar(10),c_id int ,designation varchar(10),salary numeric(8,2),city varchar(10),constraint ep11 primary key(empid));
+desc employ;
+insert into employee100 values(1,'yasar',101,'sd',30000,'tvm');
+insert into employee100 values(2,'jijo',102,'sd',30000,'klm');
+insert into employee100 values(3,'siva',103,'manager',50000,'ekm');
+select * from employee100;
+create view manager1000 as select name,designation,salary from employee100 where designation='manager';
+update manager1000 set salary=salary+salary*(10/100);
